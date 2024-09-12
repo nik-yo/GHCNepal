@@ -1,0 +1,38 @@
+name: ghcnepal
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:11.4
+    restart: no
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'C:\Projects\GHCNepal\bitnami\mariadb:/bitnami/mariadb'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_wordpress
+      - MARIADB_DATABASE=bitnami_wordpress
+  wordpress:
+    image: docker.io/bitnami/wordpress:6
+    restart: no
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+    volumes:
+      - 'C:\Projects\GHCNepal\bitnami\wordpress:/bitnami/wordpress'
+    depends_on:
+      - mariadb
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - WORDPRESS_DATABASE_HOST=mariadb
+      - WORDPRESS_DATABASE_PORT_NUMBER=3306
+      - WORDPRESS_DATABASE_USER=bn_wordpress
+      - WORDPRESS_DATABASE_NAME=bitnami_wordpress
+      # - WORDPRESS_USERNAME=user
+      # - WORDPRESS_PASSWORD=bitnami
+# volumes:
+#   mariadb_data:
+#     driver: local
+#   wordpress_data:
+#     driver: local
